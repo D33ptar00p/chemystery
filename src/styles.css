@@ -271,10 +271,44 @@ button.ghost:hover { color: var(--text); border-color: var(--accent-2); }
 button.ghost.wide { width: 100%; }
 
 .disclaimer {
-  position: absolute; left: 0; right: 0; bottom: 0;
-  padding: 9px 16px; font-size: 11.5px; color: var(--muted);
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 16px;
+  font-size: 11.5px;
+  color: var(--muted);
   background: linear-gradient(transparent, var(--scrim) 45%);
-  text-align: center; pointer-events: none;
+  /* The strip itself must not eat clicks meant for the workspace behind it;
+     only the repository link takes pointer events back. */
+  pointer-events: none;
+}
+.disclaimer p {
+  margin: 0;
+  flex: 1 1 auto;
+  text-align: center;
+  /* Balances the icon's width so the text stays optically centred. */
+  padding-left: 26px;
+}
+.repo-link {
+  flex: none;
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius-sm, 6px);
+  color: var(--muted);
+}
+.repo-link:hover { color: var(--text); background: var(--panel-3); }
+.repo-link svg { width: 16px; height: 16px; fill: currentColor; }
+
+@media (max-width: 1080px) {
+  .disclaimer p { padding-left: 0; }
 }
 
 .info-head {
