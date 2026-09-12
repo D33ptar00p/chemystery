@@ -1,0 +1,264 @@
+/*
+ * Visual directions.
+ *
+ * Each is a token override on the base layer in styles.css, selected by
+ * [data-design] on the root element and combined with [data-theme].
+ *
+ * A shared rule across all three: the chrome is desaturated. Element colours in
+ * the workspace are factual claims about how substances look, and they are the
+ * only saturated thing the eye should find. The one accent belongs to
+ * activation energy.
+ */
+
+@import '@fontsource-variable/archivo';
+@import '@fontsource/ibm-plex-mono/400.css';
+@import '@fontsource/ibm-plex-mono/600.css';
+
+:root {
+  --font-body: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-display: var(--font-body);
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+  --radius: 8px;
+  --radius-sm: 6px;
+  --rule: 1px;
+}
+
+body { font-family: var(--font-body); }
+code, .config, .mol-label, .formula, .tile-mass, .tile-z { font-family: var(--font-mono); }
+h1, h2, .tile-symbol { font-family: var(--font-display); }
+
+/* ================================================================
+   BENCHTOP
+   Matte black phenolic resin, the surface of every school lab bench,
+   against glazed porcelain. The chrome carries no colour of its own:
+   molecules already do, and those colours are factual. The single
+   accent belongs to activation energy — see the flame tests below.
+   ================================================================ */
+
+:root {
+  --font-body: 'Archivo Variable', system-ui, sans-serif;
+  --font-display: 'Archivo Variable', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --radius: 3px;
+  --radius-sm: 2px;
+}
+
+[data-theme='dark'] {
+  --bg: #131313;
+  --panel: #1b1b1b;
+  --panel-2: #212121;
+  --panel-3: #2b2b2b;
+  --panel-3-hover: #363636;
+  --input-bg: #161616;
+  --line: #383838;
+  --scroll-thumb: #454545;
+
+  --text: #ecebe8;
+  --muted: #9a9894;
+  --muted-2: #8d8b87;
+  --faint: #706e6a;
+
+  --accent: #2f9bdd;
+  --accent-text: #62b8ec;
+  --accent-ink: #04141f;
+  --accent-soft: rgba(47, 155, 221, 0.12);
+  --accent-soft-line: rgba(47, 155, 221, 0.4);
+  --accent-soft-text: #9fd4f2;
+  --accent-2: #c8c5bf;
+  --accent-2-ink: #131313;
+
+  --topbar-from: #1d1d1d;
+  --topbar-to: #151515;
+  --overlay: rgba(27, 27, 27, 0.97);
+  --overlay-soft: rgba(27, 27, 27, 0.93);
+  --label-bg: rgba(12, 12, 12, 0.8);
+  --label-line: rgba(190, 188, 182, 0.28);
+  --label-active-bg: rgba(8, 42, 62, 0.9);
+  --swatch-line: rgba(255, 255, 255, 0.26);
+  --shadow: rgba(0, 0, 0, 0.62);
+  --scrim: rgba(19, 19, 19, 0.92);
+
+  --flame-outer: #2f9bdd;
+  --flame-inner: #a8ddf7;
+  --uv-core: #c9b6f0;
+  --uv-ray: #a98fe0;
+
+  --canvas: #0f0f0f;
+}
+
+[data-theme='light'] {
+  --bg: #d8d6d1;
+  --panel: #f3f2ef;
+  --panel-2: #fbfaf8;
+  --panel-3: #e8e6e1;
+  --panel-3-hover: #dedbd5;
+  --input-bg: #ffffff;
+  --line: #c2bfb8;
+  --scroll-thumb: #b0ada6;
+
+  --text: #171715;
+  --muted: #5d5b56;
+  --muted-2: #67655f;
+  --faint: #83817b;
+
+  --accent: #1273ad;
+  --accent-text: #0d5b8a;
+  --accent-ink: #ffffff;
+  --accent-soft: rgba(18, 115, 173, 0.1);
+  --accent-soft-line: rgba(18, 115, 173, 0.36);
+  --accent-soft-text: #0b4a70;
+  --accent-2: #3a3834;
+  --accent-2-ink: #ffffff;
+
+  --topbar-from: #ffffff;
+  --topbar-to: #efedea;
+  --overlay: rgba(251, 250, 248, 0.97);
+  --overlay-soft: rgba(251, 250, 248, 0.94);
+  --label-bg: rgba(255, 255, 255, 0.9);
+  --label-line: rgba(40, 38, 34, 0.3);
+  --label-active-bg: rgba(214, 236, 248, 0.96);
+  --swatch-line: rgba(0, 0, 0, 0.28);
+  --shadow: rgba(40, 38, 34, 0.2);
+  --scrim: rgba(216, 214, 209, 0.92);
+
+  --flame-outer: #0f6699;
+  --flame-inner: #2f9bdd;
+  --uv-core: #6a46b8;
+  --uv-ray: #8a68d0;
+
+  --canvas: #eceae6;
+}
+
+/* Graduations, like the marks up the side of a burette. */
+.panel { border-left-width: 2px; }
+.element-tile { border-width: 2px; }
+.topbar h1 { font-weight: 700; letter-spacing: -0.02em; }
+
+/* ================================================================
+   BENCHTOP ACCENTS — flame tests
+   The accent marks activation energy, so it is drawn from the colours
+   elements actually emit in a flame. Each is a real emission colour,
+   not a hue picked to suit the UI: sodium's 589 nm doublet is the
+   yellow of a street lamp, copper burns blue-green, potassium lilac.
+   All five clear 4.5:1 as text on panel and as ink on fill, in both modes.
+   ================================================================ */
+
+/* --- Sodium, 589 nm --- */
+[data-accent='sodium'][data-theme='dark'] {
+  --accent: #ffab00;
+  --accent-text: #ffc247;
+  --accent-ink: #0d0d0d;
+  --accent-soft: rgba(255, 171, 0, 0.12);
+  --accent-soft-line: rgba(255, 171, 0, 0.4);
+  --accent-soft-text: #ffd98a;
+  --label-active-bg: rgba(62, 41, 0, 0.9);
+  --flame-outer: #ffab00;
+  --flame-inner: #ffe3a1;
+}
+[data-accent='sodium'][data-theme='light'] {
+  --accent: #a35f00;
+  --accent-text: #7d4800;
+  --accent-ink: #ffffff;
+  --accent-soft: rgba(163, 95, 0, 0.1);
+  --accent-soft-line: rgba(163, 95, 0, 0.36);
+  --accent-soft-text: #6a3d00;
+  --label-active-bg: rgba(255, 238, 206, 0.96);
+  --flame-outer: #a35f00;
+  --flame-inner: #e09a1f;
+}
+
+/* --- Copper --- */
+[data-accent='copper'][data-theme='dark'] {
+  --accent: #14b8a6;
+  --accent-text: #4fd6c6;
+  --accent-ink: #04201d;
+  --accent-soft: rgba(20, 184, 166, 0.12);
+  --accent-soft-line: rgba(20, 184, 166, 0.4);
+  --accent-soft-text: #8fe8dd;
+  --label-active-bg: rgba(3, 46, 42, 0.9);
+  --flame-outer: #14b8a6;
+  --flame-inner: #a7f0e6;
+}
+[data-accent='copper'][data-theme='light'] {
+  --accent: #0b7d70;
+  --accent-text: #075f55;
+  --accent-ink: #ffffff;
+  --accent-soft: rgba(11, 125, 112, 0.1);
+  --accent-soft-line: rgba(11, 125, 112, 0.36);
+  --accent-soft-text: #064c44;
+  --label-active-bg: rgba(212, 244, 239, 0.96);
+  --flame-outer: #0b7d70;
+  --flame-inner: #17a897;
+}
+
+/* --- Potassium --- */
+[data-accent='potassium'][data-theme='dark'] {
+  --accent: #a77bf0;
+  --accent-text: #c4a5f7;
+  --accent-ink: #0d0715;
+  --accent-soft: rgba(167, 123, 240, 0.13);
+  --accent-soft-line: rgba(167, 123, 240, 0.4);
+  --accent-soft-text: #d8c3fb;
+  --label-active-bg: rgba(36, 20, 62, 0.9);
+  --flame-outer: #a77bf0;
+  --flame-inner: #ddccfb;
+}
+[data-accent='potassium'][data-theme='light'] {
+  --accent: #6b3fc4;
+  --accent-text: #552f9e;
+  --accent-ink: #ffffff;
+  --accent-soft: rgba(107, 63, 196, 0.1);
+  --accent-soft-line: rgba(107, 63, 196, 0.36);
+  --accent-soft-text: #46277f;
+  --label-active-bg: rgba(233, 223, 250, 0.96);
+  --flame-outer: #6b3fc4;
+  --flame-inner: #9871e0;
+}
+
+/* --- Strontium --- */
+[data-accent='strontium'][data-theme='dark'] {
+  --accent: #ff4d5e;
+  --accent-text: #ff8a94;
+  --accent-ink: #160406;
+  --accent-soft: rgba(255, 77, 94, 0.13);
+  --accent-soft-line: rgba(255, 77, 94, 0.4);
+  --accent-soft-text: #ffb3ba;
+  --label-active-bg: rgba(63, 12, 18, 0.9);
+  --flame-outer: #ff4d5e;
+  --flame-inner: #ffc2c8;
+}
+[data-accent='strontium'][data-theme='light'] {
+  --accent: #c01527;
+  --accent-text: #9c1020;
+  --accent-ink: #ffffff;
+  --accent-soft: rgba(192, 21, 39, 0.09);
+  --accent-soft-line: rgba(192, 21, 39, 0.36);
+  --accent-soft-text: #820d1a;
+  --label-active-bg: rgba(252, 223, 226, 0.96);
+  --flame-outer: #c01527;
+  --flame-inner: #e8474f;
+}
+
+/* --- Barium --- */
+[data-accent='barium'][data-theme='dark'] {
+  --accent: #8fd14f;
+  --accent-text: #aee07d;
+  --accent-ink: #0b1404;
+  --accent-soft: rgba(143, 209, 79, 0.12);
+  --accent-soft-line: rgba(143, 209, 79, 0.4);
+  --accent-soft-text: #cdedaa;
+  --label-active-bg: rgba(30, 51, 12, 0.9);
+  --flame-outer: #8fd14f;
+  --flame-inner: #d8f2be;
+}
+[data-accent='barium'][data-theme='light'] {
+  --accent: #4a7d1f;
+  --accent-text: #3a6317;
+  --accent-ink: #ffffff;
+  --accent-soft: rgba(74, 125, 31, 0.1);
+  --accent-soft-line: rgba(74, 125, 31, 0.36);
+  --accent-soft-text: #2f5112;
+  --label-active-bg: rgba(228, 243, 214, 0.96);
+  --flame-outer: #4a7d1f;
+  --flame-inner: #6fa83a;
+}
