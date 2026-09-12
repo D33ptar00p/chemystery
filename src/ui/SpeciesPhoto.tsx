@@ -126,6 +126,66 @@ function titleFor(species: Species): string {
 interface Photo {
   src: string
   page: string
+  /** Author, where Commons records one. */
+  credit?: string
+  /** Short licence name, e.g. "CC BY-SA 4.0". */
+  licence?: string
+}
+
+/**
+ * The Commons file a thumbnail came from.
+ *
+ * Thumbnail URLs look like
+ *   .../commons/thumb/d/d7/Gold-crystals.jpg/330px-Gold-crystals.jpg
+ * so the original file name is the segment before the sized one. Non-thumb URLs
+ * end with the file name directly.
+ */
+function fileTitleFromUrl(src: string): string | null {
+  try {
+    const parts = new URL(src).pathname.split('/').filter(Boolean)
+    const thumb = parts.indexOf('thumb')
+    const name = thumb >= 0 ? parts[parts.length - 2] : parts[parts.length - 1]
+    return name ? decodeURIComponent(name) : null
+  } catch {
+    return null
+  }
+}
+
+const stripTags = (html: string) =>
+  html
+    .replace(/<[^>]*>/g, '')
+    .replace(/&amp;/g, '&')
+    .replace(/\s+/g, ' ')
+    .trim()
+
+/**
+ * Author and licence for a Commons file.
+ *
+ * CC BY-SA asks for the creator to be named. Linking to the source page, where
+ * both are recorded, is defensible, but naming them is what the licence actually
+ * asks for — and it costs one cached request.
+ */
+async function creditFor(fileTitle: string): Promise<Pick<Photo, 'credit' | 'licence'>> {
+  const url =
+    `${COMMONS}?action=query&titles=${encodeURIComponent('File:' + fileTitle)}` +
+    `&prop=imageinfo&iiprop=extmetadata&format=json&origin=*`
+  const response = await fetch(url)
+  if (!response.ok) return {}
+  const data = await response.json()
+  const page = Object.values(data?.query?.pages ?? {})[0] as
+    | { imageinfo?: { extmetadata?: Record<string, { value?: string }> }[] }
+    | undefined
+  const meta = page?.imageinfo?.[0]?.extmetadata
+  if (!meta) return {}
+
+  const artist = meta.Artist?.value ? stripTags(meta.Artist.value) : undefined
+  const licence = meta.LicenseShortName?.value ? stripTags(meta.LicenseShortName.value) : undefined
+  return {
+    // A very long author string is usually a full institutional credit; the
+    // link carries the detail, so keep the caption short.
+    credit: artist && artist.length <= 48 ? artist : undefined,
+    licence,
+  }
 }
 
 /** Cached across selections, including misses, so nothing is fetched twice. */
@@ -208,13 +268,16 @@ async function fromCommonsFile(file: string): Promise<Photo | null> {
 
 async function resolvePhoto(title: string, speciesId: string): Promise<Photo | null> {
   const override = PHOTO_OVERRIDES[speciesId]
-  if (override) {
-    const curated = await fromCommonsFile(override).catch(() => null)
-    if (curated) return curated
-  }
-  const lead = await fromLeadImage(title).catch(() => null)
-  if (lead) return lead
-  return fromPageImages(title).catch(() => null)
+  const found =
+    (override ? await fromCommonsFile(override).catch(() => null) : null) ??
+    (await fromLeadImage(title).catch(() => null)) ??
+    (await fromPageImages(title).catch(() => null))
+  if (!found) return null
+
+  const file = fileTitleFromUrl(found.src)
+  if (!file) return found
+  const credit = await creditFor(file).catch(() => ({}))
+  return { ...found, ...credit }
 }
 
 export function SpeciesPhoto({ species }: { species: Species }) {
@@ -260,8 +323,9 @@ export function SpeciesPhoto({ species }: { species: Species }) {
     <figure className="photo">
       <img src={photo.src} alt={`Photograph of ${species.name}`} loading="lazy" />
       <figcaption>
+        {photo.credit && <span className="photo-credit">{photo.credit}</span>}
         <a href={photo.page} target="_blank" rel="noreferrer noopener">
-          Photo via Wikipedia — source and licence
+          {photo.licence ? `${photo.licence} — via Wikimedia` : 'Photo via Wikimedia — source and licence'}
         </a>
       </figcaption>
     </figure>

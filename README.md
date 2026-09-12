@@ -42,6 +42,14 @@ The organic table was compiled against literature sources; the element, inorgani
 reaction tables were assembled from standard reference values without source-by-source
 verification. Treat it as a teaching toy, not a reference.
 
+## Licence
+
+[MIT](LICENSE) — use it, change it, build on it, commercially or not.
+
+The fonts it ships (Archivo and IBM Plex Mono) are under the SIL Open Font License, and
+the photographs are fetched from Wikimedia at runtime under their own terms. See
+[third-party notices](THIRD-PARTY-NOTICES.md).
+
 ## Contact
 
 Bug reports and suggestions are welcome via

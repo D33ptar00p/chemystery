@@ -862,3 +862,11 @@ button.link {
   border: 1px solid var(--swatch-line);
   flex: none;
 }
+
+.photo-credit {
+  color: var(--muted);
+  font-size: 11px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
